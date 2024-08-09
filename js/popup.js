@@ -23,7 +23,7 @@ document.getElementById('openPage').addEventListener('click', () => {
 // (*) Create a release
 // () Publish
  
-// () Fix remove video from playlist
+// (*) Fix remove video from playlist
 // () Add title for shorts
 // () Add more checks for avatar img
 // () Add more checks for channel name

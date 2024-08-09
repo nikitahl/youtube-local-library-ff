@@ -11,7 +11,7 @@ document.addEventListener('DOMContentLoaded', () => {
       return;
     }
     // eslint-disable-next-line
-    renderVideos(savedVideos, videosList); // defined in utils.js
+    renderVideos(savedVideos, videosList, 'watchlist'); // defined in utils.js
   });
 
   browser.storage.local.get({ playlists: [] }, result => {
@@ -27,23 +27,11 @@ document.addEventListener('DOMContentLoaded', () => {
         playlistContainer.classList.add('playlist');
         playlistContainer.innerHTML = `<strong class="title">${playlist.playlistName}</strong>
         <span class="secondary-link">${playlist.videos.length} videos</span>
-        <a class="primary-link view-playlist" data-playlist-id="${key}" href="playlist.html">View full playlist</a>
+        <a class="primary-link view-playlist" data-playlist-id="${key}" href="playlist.html?playlistName=${key}">View full playlist</a>
         `;
         playlistsContainer.appendChild(playlistContainer);
       }
     }
-    const playlistElements = document.querySelectorAll('.view-playlist');
-    playlistElements.forEach(playlistElement => {
-      playlistElement.addEventListener('click', e => {
-        e.preventDefault();
-        const playlistId = playlistElement.dataset.playlistId;
-        const playlistData = playlists[playlistId];
-
-        browser.storage.local.set({ selectedPlaylist: playlistData }, () => {
-          window.location.href = browser.runtime.getURL('playlist.html');
-        });
-      });
-    });
   });
 
   // Fetch saved channels from localStorage
