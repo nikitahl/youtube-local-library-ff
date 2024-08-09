@@ -23,6 +23,12 @@ document.getElementById('openPage').addEventListener('click', () => {
 // (*) Create a release
 // () Publish
  
+// () Fix remove video from playlist
+// () Add title for shorts
+// () Add more checks for avatar img
+// () Add more checks for channel name
+// () Add ability to remove playlists
+// () Add playlists to playlist page
 // () Add checks for local storage cpacity
 // ( ) Add dark mode (to the main extention popup)
 // ( ) Download (to the main extention popup)
