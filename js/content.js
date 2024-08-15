@@ -40,7 +40,7 @@ const playlistBtn = `<div class="option">
 </div>
 </div>
 <div class="option">
-<button class="save-btn" id="saveToWatchlist">Save to Watch later</button>
+<button class="save-btn" id="saveToWatchLater">Save to Watch later</button>
 </div>`;
 const closeBtn = '<button class="close-btn" id="closePopup" title="Close"><svg xmlns="http://www.w3.org/2000/svg" enable-background="new 0 0 24 24" height="18" viewBox="0 0 24 24" width="18" focusable="false" style="pointer-events: none; display: inherit;" aria-hidden="true"><path d="m12.71 12 8.15 8.15-.71.71L12 12.71l-8.15 8.15-.71-.71L11.29 12 3.15 3.85l.71-.71L12 11.29l8.15-8.15.71.71L12.71 12z"></path></svg></button>';
 
@@ -84,8 +84,8 @@ function createPopup(link, type, linkText, linkMeta) {
       closePopup();
     });
   } else {
-    document.getElementById('saveToWatchlist').addEventListener('click', () => {
-      saveToLocalStorage('watchlist', link, linkText, linkMeta);
+    document.getElementById('saveToWatchLater').addEventListener('click', () => {
+      saveToLocalStorage('playlists', link, linkText, linkMeta, 'Watch later');
       closePopup();
     });
 

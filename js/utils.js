@@ -1,6 +1,6 @@
 const { URL } = window;
 // eslint-disable-next-line
-function renderVideos(videos, container, category, playlistName = null) { // used in playlists.js and library.js
+function renderVideos(videos, container, category, playlistName = null) { // used in library.js
   videos && videos.forEach(video => {
     const li = document.createElement('li');
     const videoLink = document.createElement('a');
@@ -47,43 +47,53 @@ function renderVideos(videos, container, category, playlistName = null) { // use
     removeBtnWrapper.appendChild(removeBtn);
     container.appendChild(li);
   });
+}
 
-  document.body.addEventListener('click', e => {
-    const item = e.target.closest('li');
-    const type = item?.dataset?.type;
-    if (e.target.tagName === 'BUTTON' && e.target.classList.contains('remove-item') && window.confirm(`Do you really want to remove this ${type}?`)) {
-      const link = item.dataset.link;
-      const category = item.dataset.category;
-      const playlistName = item.dataset.playlistName;
-      removeFromLocalStorage(category, link, playlistName);
-      item.remove();
+document.body.addEventListener('click', e => {
+  const item = e.target.closest('li');
+  const type = item?.dataset?.type;
+  if (e.target.tagName === 'BUTTON' && e.target.classList.contains('remove-item') && window.confirm(`Do you really want to remove this ${type}?`)) {
+    const link = item.dataset.link;
+    const category = item.dataset.category;
+    const playlistName = item.dataset.playlistName;
+    removeFromLocalStorage(category, link, playlistName);
+    item.remove();
+  }
+});
+
+function removeFromLocalStorage(category, link, playlistName = null) {
+  chrome.storage.local.get([ category ], result => {
+    let items = result[category] || {};
+    let save = false;
+
+    console.log('removeFromLocalStorage', { result, category, link, playlistName, items });
+    if (playlistName) {
+      if (items[playlistName] && items[playlistName].videos.find(item => item.link === link)) {
+        items[playlistName].videos = items[playlistName].videos.filter(item => item.link !== link);
+        save = true;
+      }
+    } else {
+      if (items.general && items.general.find(item => item.link === link)) {
+        items.general = items.general.filter(item => item.link !== link);
+        save = true;
+      }
+    }
+
+    if (save) {
+      chrome.storage.local.set({ [category]: items }, () => {
+        console.log(`${category} removed:`, link);
+      });
+    } else {
+      console.log(`${link} does not exist in ${category}`);
     }
   });
+}
 
-  function removeFromLocalStorage(category, link, playlistName = null) {
-    chrome.storage.local.get([ category ], result => {
-      let items = result[category] || {};
-      let save = false;
-
-      if (playlistName) {
-        if (items[playlistName] && items[playlistName].videos.find(item => item.link === link)) {
-          items[playlistName].videos = items[playlistName].videos.filter(item => item.link !== link);
-          save = true;
-        }
-      } else {
-        if (items.general && items.general.find(item => item.link === link)) {
-          items.general = items.general.filter(item => item.link !== link);
-          save = true;
-        }
-      }
-
-      if (save) {
-        chrome.storage.local.set({ [category]: items }, () => {
-          console.log(`${category} removed:`, link);
-        });
-      } else {
-        console.log(`${link} does not exist in ${category}`);
-      }
-    });
+// eslint-disable-next-line
+function createElement (tag, content = null, attributes) { // used in library.js
+  const element = document.createElement(tag);
+  if (content) {
+    element.textContent = content;
   }
+  return Object.assign(element, attributes);
 }

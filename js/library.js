@@ -1,23 +1,40 @@
 document.addEventListener('DOMContentLoaded', () => {
-  const videosList = document.getElementById('videosList');
-  const channelsList = document.getElementById('channelsList');
+  // eslint-disable-next-line
+  const url = new URL(window.location.href);
+  const currentPlaylistContainer = document.getElementById('currentPlaylist');
   const playlistsContainer = document.getElementById('playlists');
+  const channelsList = document.getElementById('channelsList');
 
-  // Fetch saved videos from localStorage
-  browser.storage.local.get({ watchlist: [] }, result => {
-    const savedVideos = result.watchlist.general;
-    if (!savedVideos) {
-      videosList.innerHTML = '<p style="margin:0">You have no videos saved in watch later.</p>';
-      return;
+  const playlistTitle = document.getElementById('playlistTitle');
+  let playlistName = url.searchParams.get('playlistName');
+  console.log('playlistName',playlistName);
+  if (!playlistName) {
+    playlistName = 'watchLater';
+  }
+  console.log('playlistName',playlistName);
+  browser.storage.local.get([ 'playlists' ], result => {
+    console.log('result.playlists',result.playlists);
+    const playlist = result.playlists && result.playlists[playlistName];
+    if (playlist) {
+      playlistTitle.innerText = playlist.playlistName;
+      if (playlist.videos.length) {
+      // eslint-disable-next-line
+      renderVideos(playlist.videos, currentPlaylistContainer, 'playlists', playlistName); // defined in utils.js
+      } else {
+        const content = 'You have no videos saved in this playlist.';
+        renderNoContent(content, currentPlaylistContainer);
+      }
+    } else {
+      const content = 'You have no videos saved in this playlist.';
+      renderNoContent(content, currentPlaylistContainer);
     }
-    // eslint-disable-next-line
-    renderVideos(savedVideos, videosList, 'watchlist'); // defined in utils.js
   });
 
   browser.storage.local.get({ playlists: [] }, result => {
     const playlists = result.playlists;
-    if (!Object.keys(playlists).length === 0) {
-      playlistsContainer.innerHTML = '<p style="margin:0">You have no playlists.</p>';
+    if (Object.keys(playlists).length === 0) {
+      const content = 'You have no playlists.';
+      renderNoContent(content, playlistsContainer);
       return;
     }
     for (const key in playlists) {
@@ -27,7 +44,7 @@ document.addEventListener('DOMContentLoaded', () => {
         playlistContainer.classList.add('playlist');
         playlistContainer.innerHTML = `<strong class="title">${playlist.playlistName}</strong>
         <span class="secondary-link">${playlist.videos.length} videos</span>
-        <a class="primary-link view-playlist" data-playlist-id="${key}" href="playlist.html?playlistName=${key}">View full playlist</a>
+        <a class="primary-link view-playlist" data-playlist-id="${key}" href="library.html?playlistName=${key}">View full playlist</a>
         `;
         playlistsContainer.appendChild(playlistContainer);
       }
@@ -37,8 +54,10 @@ document.addEventListener('DOMContentLoaded', () => {
   // Fetch saved channels from localStorage
   browser.storage.local.get({ channels: [] }, result => {
     const savedChannels = result.channels.general;
-    if (!savedChannels) {
-      channelsList.innerHTML = '<p style="margin:0">You have no saved channels.</p>';
+    console.log('savedChannels',savedChannels);
+    if (!savedChannels || !savedChannels.length) {
+      const content = 'You have no saved channels.';
+      renderNoContent(content, channelsList);
       return;
     }
     savedChannels && savedChannels.forEach(channel => {
@@ -60,6 +79,7 @@ document.addEventListener('DOMContentLoaded', () => {
       avatar.classList.add('avatar');
       if (channel?.linkMeta?.avatar) {
         avatar.src = channel.linkMeta.avatar;
+        avatar.loading = 'lazy';
       }
       li.appendChild(avatar);
       li.appendChild(channelLink);
@@ -68,3 +88,11 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   });
 });
+
+function renderNoContent (content, container) {
+  const tag = 'p';
+  const attributes = {};
+  // eslint-disable-next-line
+  const noContent = createElement(tag, content, attributes);
+  container.append(noContent);
+}
