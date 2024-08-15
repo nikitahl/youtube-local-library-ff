@@ -75,6 +75,7 @@ h3 {
 }
 
 .list.channels li {
+  gap: 15px;
   align-items: center;
 }
 
@@ -118,6 +119,10 @@ h3 {
 .secondary-link {
   font-size: 0.8em;
   color: var(--color-secondary);
+  overflow: hidden;
+  display: -webkit-box;
+  -webkit-line-clamp: 1;
+  -webkit-box-orient: vertical;
 }
 
 .secondary-link:hover {
@@ -157,9 +162,9 @@ h3 {
 }
 
 .avatar {
-  flex: 0 0 40px;
-  width: 40px;
-  height: 40px;
+  flex: 0 0 30px;
+  width: 30px;
+  height: 30px;
   border-radius: 50%;
   background: var(--color-secondary);
 }

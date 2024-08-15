@@ -16,21 +16,21 @@ browser.runtime.onMessage.addListener((message, sender, sendResponse) => {
 });
 
 const popupStyle = `<style id="save-popup-styles">
-.save-btn,.close-btn{display:block;background:#eaeaea;border:none;cursor:pointer;padding:8px 24px;color:#333;border-radius:10px;}
-.save-btn{margin:0 0 8px;}
+.save-btn,.close-btn{display:block;border:none;cursor:pointer;padding:10px 24px;color:#333;background:transparent;}
+.save-btn{display:block;width:100%;margin:0 0 8px;text-align:left;}
 .option:last-of-type .save-btn{margin:0;}
-.save-btn:not(:disabled):hover,.close-btn:hover{background:#dfdfdf;}
+.save-btn:not(:disabled):hover{background:rgba(0,0,0,0.05);}
 .save-btn:disabled{cursor:not-allowed}
 .close-btn{position:absolute;top:5px;right:5px;padding:5px;}
 .save-text{display:inline-block;font-size:12px;margin:15px 0 10px;}
-.save-input,.save-select{display:inline-block;flex:0 1 40%;max-width:45%;border:1px solid #dfdfdf;border-radius:10px;padding:7px 10px;margin:0 0 10px;}
-.playlist-container{display:flex;justify-content:space-between;}
+.save-input,.save-select{box-sizing:border-box;display:block;width:100%;border:1px solid #dfdfdf;border-radius:10px;padding:7px 10px;margin:0 0 10px;}
+.playlist-container{padding:0 24px}
 </style>`;
 const channelsBtn = `<div class="option">
 <button class="save-btn" id="saveChannel">Save Channel</button>
 </div>`;
 const playlistBtn = `<div class="option">
-<button class="save-btn" id="saveToPlaylist">Save to Playlist</button>
+<button class="save-btn" id="saveToPlaylist">Save to playlist</button>
 <div id="playlistOptions" style="display: none;">
   <div class="playlist-container">
     <select class="save-select" id="playlistSelect"></select>
@@ -60,9 +60,9 @@ function createPopup(link, type, linkText, linkMeta) {
   popup.style.right = '10px';
   popup.style.top = '10px';
   popup.style.zIndex = '10000';
-  popup.style.backgroundColor = 'rgba(255, 255, 255, 0.95)';
+  popup.style.backgroundColor = '#fff';
   popup.style.borderRadius = '10px';
-  popup.style.padding = '15px';
+  popup.style.padding = '30px 0';
   popup.style.boxShadow = '0 0 10px rgba(0, 0, 0, 0.1)';
   popup.style.width = '300px';
 
@@ -184,7 +184,7 @@ function loadPlaylists() {
     for (let playlist in playlists) {
       let option = document.createElement('option');
       option.value = playlist;
-      option.textContent = playlist;
+      option.textContent = playlists[playlist].playlistName;
       playlistSelect.appendChild(option);
     }
 
