@@ -91,6 +91,7 @@ h3 {
 .video-embed {
   width: 220px;
   height: 120px;
+  border: none;
   border-radius: var(--border-radius);
 }
 
