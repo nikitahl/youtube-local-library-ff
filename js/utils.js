@@ -116,7 +116,7 @@ function createElement (tag, content = null, attributes) { // used in library.js
     }
   }
   if (tag === 'li') {
-    console.log('attributes', attributes)
+    console.log('attributes', attributes);
   }
   return Object.assign(element, attributes);
 }
