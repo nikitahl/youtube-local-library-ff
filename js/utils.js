@@ -2,44 +2,55 @@ const { URL } = window;
 // eslint-disable-next-line
 function renderVideos(videos, container, category, playlistName = null) { // used in library.js
   videos && videos.forEach(video => {
-    const li = document.createElement('li');
-    const videoLink = document.createElement('a');
-    const channelLink = document.createElement('a');
-    const removeBtn = document.createElement('button');
-    const removeBtnWrapper = document.createElement('div');
-    const contentWrapper = document.createElement('div');
     const link = video.link;
     const videoId = new URL(link).searchParams.get('v');
-    const embedHTML = `<iframe
-    class="video-embed"
-    loading="lazy"
-    src="https://www.youtube.com/embed/${videoId}"
-    title="YouTube video player"
-    frameborder="0"
-    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
-    referrerpolicy="strict-origin-when-cross-origin"
-    allowfullscreen></iframe>`;
-    li.dataset.link = link;
-    li.dataset.category = category;
-    li.dataset.type = 'video';
+    const embedOptions = {
+      className: 'video-embed',
+      loading: 'lazy',
+      src: `https://www.youtube.com/embed/${videoId}`,
+      title: 'YouTube video player',
+      frameborder: '0',
+      allow: 'accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share',
+      referrerPolicy: 'strict-origin-when-cross-origin',
+      allowFullscreen: true
+    };
+    const embed = createElement('iframe', null, embedOptions);
+    const liOptions = {
+      'data-link': link,
+      'data-category': category,
+      'data-type': 'video'
+    };
     if (playlistName) {
-      li.dataset.playlistName = playlistName; 
+      liOptions['data-playlistname'] = playlistName; 
     }
-    li.insertAdjacentHTML('afterbegin', embedHTML);
-    contentWrapper.classList.add('video-content');
-    removeBtnWrapper.classList.add('remove-wrapper');
-    channelLink.classList.add('secondary-link');
-    channelLink.href = video.linkMeta.channelLink;
-    channelLink.textContent = video.linkMeta.channelName;
-    channelLink.title = video.linkMeta.channelName;
-    videoLink.classList.add('primary-link');
-    videoLink.href = link;
-    videoLink.title = video.linkText || 'No video title ...';
-    videoLink.textContent = video.linkText || 'No video title ...';
-    videoLink.target = '_blank';
-    removeBtn.innerHTML = '<svg xmlns="http://www.w3.org/2000/svg" enable-background="new 0 0 24 24" height="24" viewBox="0 0 24 24" width="24" focusable="false" style="pointer-events: none; display: inherit;" aria-hidden="true"><path d="M11 17H9V8h2v9zm4-9h-2v9h2V8zm4-4v1h-1v16H6V5H5V4h4V3h6v1h4zm-2 1H7v15h10V5z"></path></svg>';
-    removeBtn.title = 'Remove';
-    removeBtn.classList.add('remove-item');
+    const li = createElement('li', null,  liOptions);
+    const removeBtnWrapper = createElement('div', null, { className: 'remove-wrapper' });
+    const contentWrapper = createElement('div', null, { className: 'video-content' });
+    const channelLinkOptions = {
+      className: 'secondary-link',
+      href: video.linkMeta.channelLink,
+      title: video.linkMeta.channelName,
+      target: '_blank'
+    };
+    const channelLink = createElement('a', video.linkMeta.channelName, channelLinkOptions);
+    const videoName = video.linkText || 'No video title ...';
+    const videoLinkOptions = {
+      className: 'primary-link',
+      href: link,
+      title: videoName, 
+      target: '_blank'
+    };
+    const videoLink = createElement('a', videoName, videoLinkOptions);
+    const btnAttributes = {
+      title: 'Remove',
+      className: 'remove-item'
+    };
+    const removeBtn = createElement('button', null, btnAttributes);
+    const template = document.querySelector('#removeSvgTemplate');
+    const clone = template.content.cloneNode(true);
+
+    removeBtn.appendChild(clone);
+    li.appendChild(embed);
     li.appendChild(contentWrapper);
     li.appendChild(removeBtnWrapper);
     contentWrapper.appendChild(videoLink);
@@ -55,14 +66,14 @@ document.body.addEventListener('click', e => {
   if (e.target.tagName === 'BUTTON' && e.target.classList.contains('remove-item') && window.confirm(`Do you really want to remove this ${type}?`)) {
     const link = item.dataset.link;
     const category = item.dataset.category;
-    const playlistName = item.dataset.playlistName;
+    const playlistName = item.dataset.playlistname;
     removeFromLocalStorage(category, link, playlistName);
     item.remove();
   }
 });
 
 function removeFromLocalStorage(category, link, playlistName = null) {
-  chrome.storage.local.get([ category ], result => {
+  browser.storage.local.get([ category ], result => {
     let items = result[category] || {};
     let save = false;
 
@@ -80,7 +91,7 @@ function removeFromLocalStorage(category, link, playlistName = null) {
     }
 
     if (save) {
-      chrome.storage.local.set({ [category]: items }, () => {
+      browser.storage.local.set({ [category]: items }, () => {
         console.log(`${category} removed:`, link);
       });
     } else {
@@ -94,6 +105,18 @@ function createElement (tag, content = null, attributes) { // used in library.js
   const element = document.createElement(tag);
   if (content) {
     element.textContent = content;
+  }
+
+  // Assign other attributes, including data-* attributes
+  for (const [ key, value ] of Object.entries(attributes)) {
+    if (key.startsWith('data-')) {
+      element.setAttribute(key, value);
+    } else {
+      element[key] = value;
+    }
+  }
+  if (tag === 'li') {
+    console.log('attributes', attributes)
   }
   return Object.assign(element, attributes);
 }

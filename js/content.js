@@ -15,6 +15,8 @@ browser.runtime.onMessage.addListener((message, sender, sendResponse) => {
   }
 });
 
+const { DOMParser } = window;
+const parser = new DOMParser();
 const popupStyle = `<style id="save-popup-styles">
 .save-btn,.close-btn{display:block;border:none;cursor:pointer;padding:10px 24px;color:#333;background:transparent;}
 .save-btn{display:block;width:100%;margin:0 0 8px;text-align:left;}
@@ -29,7 +31,7 @@ const popupStyle = `<style id="save-popup-styles">
 const channelsBtn = `<div class="option">
 <button class="save-btn" id="saveChannel">Save Channel</button>
 </div>`;
-const playlistBtn = `<div class="option">
+const playlistBtn = `<div><div class="option">
 <button class="save-btn" id="saveToPlaylist">Save to playlist</button>
 <div id="playlistOptions" style="display: none;">
   <div class="playlist-container">
@@ -41,8 +43,9 @@ const playlistBtn = `<div class="option">
 </div>
 <div class="option">
 <button class="save-btn" id="saveToWatchLater">Save to Watch later</button>
-</div>`;
+</div></div>`;
 const closeBtn = '<button class="close-btn" id="closePopup" title="Close"><svg xmlns="http://www.w3.org/2000/svg" enable-background="new 0 0 24 24" height="18" viewBox="0 0 24 24" width="18" focusable="false" style="pointer-events: none; display: inherit;" aria-hidden="true"><path d="m12.71 12 8.15 8.15-.71.71L12 12.71l-8.15 8.15-.71-.71L11.29 12 3.15 3.85l.71-.71L12 11.29l8.15-8.15.71.71L12.71 12z"></path></svg></button>';
+const closeBtnElement = parser.parseFromString(closeBtn, 'text/html').body.firstChild;
 
 function createPopup(link, type, linkText, linkMeta) {
   const existingPopup = document.getElementById('extension-popup');
@@ -67,16 +70,21 @@ function createPopup(link, type, linkText, linkMeta) {
   popup.style.width = '300px';
 
   const isChannel = type === 'channel';
-  popup.innerHTML = closeBtn;
+  popup.appendChild(closeBtnElement);
   if (linkText === 'No text available') {
-    popup.innerHTML += `<b class="save-text">Could not get the name of the ${type}. Please input the name:</b><br>
+    const noText = `<b class="save-text">Could not get the name of the ${type}. Please input the name:</b><br>
     <input class="save-input" id="linkName" type="text" placeholder="No text available">`;
+    const noTextElement = parser.parseFromString(noText, 'text/html').body.firstChild;
+    popup.appendChild(noTextElement);
   }
 
-  popup.innerHTML += isChannel ? channelsBtn : playlistBtn;
+  const content = isChannel ? channelsBtn : playlistBtn;
+  const contentElement = parser.parseFromString(content, 'text/html').body.firstChild;
+  popup.appendChild(contentElement);
 
+  const styleElement = parser.parseFromString(popupStyle, 'text/html').head.firstChild;
+  document.body.appendChild(styleElement);
   document.body.appendChild(popup);
-  popup.insertAdjacentHTML('beforebegin', popupStyle);
 
   if (isChannel) {
     document.getElementById('saveChannel').addEventListener('click', () => {
@@ -112,8 +120,8 @@ function createPopup(link, type, linkText, linkMeta) {
 
   function closePopup() {
     const popupStyles = document.getElementById('save-popup-styles');
-    popupStyles.remove();
     popup.remove();
+    popupStyles.remove();
   }
 }
 
@@ -179,7 +187,11 @@ function loadPlaylists() {
     const playlistSelect = document.getElementById('playlistSelect');
     const playlistName = document.getElementById('newPlaylistName');
     const savePlaylist = document.getElementById('createPlaylist');
-    playlistSelect.innerHTML = '<option value="">Choose a playlist</option>';
+    // eslint-disable-next-line
+    const defaultOption = document.createElement('option');
+    defaultOption.setAttribute('value', '');
+    defaultOption.textContent = 'Choose a playlist';
+    playlistSelect.appendChild(defaultOption);
 
     for (let playlist in playlists) {
       let option = document.createElement('option');

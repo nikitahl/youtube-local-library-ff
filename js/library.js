@@ -42,10 +42,22 @@ document.addEventListener('DOMContentLoaded', () => {
         const playlist = playlists[key];
         const playlistContainer = document.createElement('div');
         playlistContainer.classList.add('playlist');
-        playlistContainer.innerHTML = `<strong class="title">${playlist.playlistName}</strong>
-        <span class="secondary-link">${playlist.videos.length} videos</span>
-        <a class="primary-link view-playlist" data-playlist-id="${key}" href="library.html?playlistName=${key}">View full playlist</a>
-        `;
+        const playlistTitle = document.createElement('strong');
+        playlistTitle.classList.add('title');
+        playlistTitle.innerText = playlist.playlistName;
+        const playlistLength = document.createElement('span');
+        playlistLength.classList.add('secondary-link');
+        playlistLength.innerText = `${playlist.videos.length} videos`;
+        const playlistLink = document.createElement('a');
+        playlistLink.classList.add('primary-link', 'view-playlist');
+        playlistLink.href = `library.html?playlistName=${key}`;
+        playlistLink.setAttribute('data-playlist-id', key);
+        playlistLink.innerText = 'View full playlist';
+
+        playlistContainer.appendChild(playlistTitle);
+        playlistContainer.appendChild(playlistLength);
+        playlistContainer.appendChild(playlistLink);
+    
         playlistsContainer.appendChild(playlistContainer);
       }
     }
@@ -61,26 +73,43 @@ document.addEventListener('DOMContentLoaded', () => {
       return;
     }
     savedChannels && savedChannels.forEach(channel => {
-      const li = document.createElement('li');
-      const channelLink = document.createElement('a');
-      const removeBtn = document.createElement('button');
-      const avatar = document.createElement('img');
-      li.dataset.link = channel.link;
-      li.dataset.category = 'channels';
-      li.dataset.type = 'channel';
-      channelLink.href = channel.link;
-      channelLink.textContent = channel.linkText;
-      channelLink.title = channel.linkText;
-      channelLink.target = '_blank';
-      channelLink.classList.add('secondary-link');
-      removeBtn.innerHTML = '<svg xmlns="http://www.w3.org/2000/svg" enable-background="new 0 0 24 24" height="24" viewBox="0 0 24 24" width="24" focusable="false" style="pointer-events: none; display: inherit;" aria-hidden="true"><path d="M11 17H9V8h2v9zm4-9h-2v9h2V8zm4-4v1h-1v16H6V5H5V4h4V3h6v1h4zm-2 1H7v15h10V5z"></path></svg>';
-      removeBtn.title = 'Remove';
-      removeBtn.classList.add('remove-item');
-      avatar.classList.add('avatar');
-      if (channel?.linkMeta?.avatar) {
-        avatar.src = channel.linkMeta.avatar;
-        avatar.loading = 'lazy';
+      const liOptions = {
+        'data-link': channel.link,
+        'data-category': 'channels',
+        'data-type': 'channel'
+      };
+      if (playlistName) {
+        liOptions['data-playlistname'] = playlistName; 
       }
+      // eslint-disable-next-line
+      const li = createElement('li', null,  liOptions);
+      const channelLinkOptions = {
+        className: 'secondary-link',
+        href: channel.link,
+        title: channel.linkText,
+        target: '_blank'
+      };
+      // eslint-disable-next-line
+      const channelLink = createElement('a', channel.linkText, channelLinkOptions);
+      const btnAttributes = {
+        title: 'Remove',
+        className: 'remove-item'
+      };
+      // eslint-disable-next-line
+      const removeBtn = createElement('button', null, btnAttributes);
+      const template = document.querySelector('#removeSvgTemplate');
+      const clone = template.content.cloneNode(true);
+      removeBtn.appendChild(clone);
+      const avatarOptions = {
+        className: 'avatar'
+      };
+      // avatar.classList.add('avatar');
+      if (channel?.linkMeta?.avatar) {
+        avatarOptions.src = channel.linkMeta.avatar;
+        avatarOptions.loading = 'lazy';
+      }
+      // eslint-disable-next-line
+      const avatar = createElement('img', null , avatarOptions);
       li.appendChild(avatar);
       li.appendChild(channelLink);
       li.appendChild(removeBtn);
