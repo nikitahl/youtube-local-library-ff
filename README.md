@@ -40,7 +40,7 @@ yarn build
 Watch changes for the project:
 
 ```sh
-yarn build
+yarn watch
 ```
 
 Build production version of the project:
