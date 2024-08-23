@@ -77,7 +77,6 @@ function removeFromLocalStorage(category, link, playlistName = null) {
     let items = result[category] || {};
     let save = false;
 
-    console.log('removeFromLocalStorage', { result, category, link, playlistName, items });
     if (playlistName) {
       if (items[playlistName] && items[playlistName].videos.find(item => item.link === link)) {
         items[playlistName].videos = items[playlistName].videos.filter(item => item.link !== link);
@@ -100,7 +99,6 @@ function removeFromLocalStorage(category, link, playlistName = null) {
   });
 }
 
-// eslint-disable-next-line
 function createElement (tag, content = null, attributes) { // used in library.js
   const element = document.createElement(tag);
   if (content) {
@@ -114,9 +112,6 @@ function createElement (tag, content = null, attributes) { // used in library.js
     } else {
       element[key] = value;
     }
-  }
-  if (tag === 'li') {
-    console.log('attributes', attributes);
   }
   return Object.assign(element, attributes);
 }

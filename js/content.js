@@ -24,6 +24,7 @@ const popupStyle = `<style id="save-popup-styles">
 .save-btn:not(:disabled):hover{background:rgba(0,0,0,0.05);}
 .save-btn:disabled{cursor:not-allowed}
 .close-btn{position:absolute;top:5px;right:5px;padding:5px;}
+.no-name{padding:0 24px;}
 .save-text{display:inline-block;font-size:12px;margin:15px 0 10px;}
 .save-input,.save-select{box-sizing:border-box;display:block;width:100%;border:1px solid #dfdfdf;border-radius:10px;padding:7px 10px;margin:0 0 10px;}
 .playlist-container{padding:0 24px}
@@ -72,8 +73,8 @@ function createPopup(link, type, linkText, linkMeta) {
   const isChannel = type === 'channel';
   popup.appendChild(closeBtnElement);
   if (linkText === 'No text available') {
-    const noText = `<b class="save-text">Could not get the name of the ${type}. Please input the name:</b><br>
-    <input class="save-input" id="linkName" type="text" placeholder="No text available">`;
+    const noText = `<div class="no-name"><b class="save-text">Could not get the name of the ${type}. Please input the name:</b><br>
+    <input class="save-input" id="linkName" type="text" placeholder="No text available"></div>`;
     const noTextElement = parser.parseFromString(noText, 'text/html').body.firstChild;
     popup.appendChild(noTextElement);
   }
@@ -103,10 +104,12 @@ function createPopup(link, type, linkText, linkMeta) {
     });
   
     document.getElementById('createPlaylist').addEventListener('click', () => {
-      const playlistSelect = document.getElementById('playlistSelect').value;
       const playlistName = document.getElementById('newPlaylistName').value;
+      const select = document.getElementById('playlistSelect');
+      const playlistSelect = select.value;
       if (playlistSelect) {
-        saveToLocalStorage('playlists', link, linkText, linkMeta, playlistSelect);
+        const selectName = select.querySelector(`option[value="${playlistSelect}"]`).textContent;
+        saveToLocalStorage('playlists', link, linkText, linkMeta, selectName);
       } else if (playlistName) {
         saveToLocalStorage('playlists', link, linkText, linkMeta, playlistName);
       } else {
@@ -187,7 +190,6 @@ function loadPlaylists() {
     const playlistSelect = document.getElementById('playlistSelect');
     const playlistName = document.getElementById('newPlaylistName');
     const savePlaylist = document.getElementById('createPlaylist');
-    // eslint-disable-next-line
     const defaultOption = document.createElement('option');
     defaultOption.setAttribute('value', '');
     defaultOption.textContent = 'Choose a playlist';
@@ -203,8 +205,9 @@ function loadPlaylists() {
     playlistSelect.addEventListener('change', () => {
       const selectedPlaylist = playlistSelect.value;
       if (selectedPlaylist) {
+        const name = playlists[selectedPlaylist].playlistName;
         playlistName.style.display = 'none';
-        savePlaylist.textContent = `Save to ${selectedPlaylist} playlist`;
+        savePlaylist.textContent = `Save to ${name} playlist`;
         savePlaylist.removeAttribute('disabled');
       } else {
         playlistName.style.display = 'inline-block';

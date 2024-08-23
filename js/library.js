@@ -7,13 +7,10 @@ document.addEventListener('DOMContentLoaded', () => {
 
   const playlistTitle = document.getElementById('playlistTitle');
   let playlistName = url.searchParams.get('playlistName');
-  console.log('playlistName',playlistName);
   if (!playlistName) {
     playlistName = 'watchLater';
   }
-  console.log('playlistName',playlistName);
   browser.storage.local.get([ 'playlists' ], result => {
-    console.log('result.playlists',result.playlists);
     const playlist = result.playlists && result.playlists[playlistName];
     if (playlist) {
       playlistTitle.innerText = playlist.playlistName;
@@ -64,9 +61,8 @@ document.addEventListener('DOMContentLoaded', () => {
   });
 
   // Fetch saved channels from localStorage
-  browser.storage.local.get({ channels: [] }, result => {
+  chrome.storage.local.get({ channels: [] }, result => {
     const savedChannels = result.channels.general;
-    console.log('savedChannels',savedChannels);
     if (!savedChannels || !savedChannels.length) {
       const content = 'You have no saved channels.';
       renderNoContent(content, channelsList);
@@ -78,9 +74,6 @@ document.addEventListener('DOMContentLoaded', () => {
         'data-category': 'channels',
         'data-type': 'channel'
       };
-      if (playlistName) {
-        liOptions['data-playlistname'] = playlistName; 
-      }
       // eslint-disable-next-line
       const li = createElement('li', null,  liOptions);
       const channelLinkOptions = {
