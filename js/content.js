@@ -130,7 +130,7 @@ function createPopup(link, type, linkText, linkMeta) {
 
 function saveToLocalStorage(category, link, linkText, linkMeta, playlistName = null) {
   if (linkText === 'No text available' && document.getElementById('linkName')) {
-    linkText = document.getElementById('linkName').value;
+    linkText = document.getElementById('linkName').value || linkText;
   }
   browser.storage.local.get([ category ], result => {
     let items = result[category] || {};
