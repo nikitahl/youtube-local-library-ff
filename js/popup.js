@@ -21,14 +21,14 @@ document.getElementById('openPage').addEventListener('click', () => {
 // (*) Allow to save videos to playlists
 // (*) Add ablitity to create playlists
 // (*) Create a release
-// () Publish
+// (*) Publish
  
 // (*) Fix remove video from playlist
-// () Add title for shorts
+// () Add label for shorts (to indicate it'sa short)
 // () Add more checks for avatar img
 // () Add more checks for channel name
 // () Add ability to remove playlists
-// () Add playlists to playlist page
+// (*) Add playlists to playlist page
 // () Add checks for local storage cpacity
 // ( ) Add dark mode (to the main extention popup)
 // ( ) Download (to the main extention popup)
@@ -36,3 +36,6 @@ document.getElementById('openPage').addEventListener('click', () => {
 // ( )   JSON file (to the main extention popup)
 // ( ) Upload JSON file(to the main extention popup)
 // ( ) Clear all with confirmation (to the main extention popup)
+// () Add ability to add videos from one playlist to another
+// () Add local search to library
+// () Add ability to save current video
