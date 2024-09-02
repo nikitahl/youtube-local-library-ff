@@ -48,9 +48,14 @@ or watch changes:
 ```sh
 yarn watch
 ```
-6. Create a zip archive containing all of the HTML files, `manifest.json` file and `dist` and `images` folders.
-7. Open following URL in Firefox: [about:debugging#/runtime/this-firefox](about:debugging#/runtime/this-firefox)
-8. Upload the zip archive
+6. Install [web-ext](https://www.npmjs.com/package/web-ext) package:
+```sh
+npm install --global web-ext
+```
+7. Run the `start` command to execute the web-ext package (`web-ext run`) to refresh extension on change
+```sh
+yarn run start
+```
 
 ## Codestyle
 

@@ -14,7 +14,8 @@
     "lint": "eslint .",
     "build": "gulp --development",
     "build-prod": "gulp --production",
-    "watch": "gulp watch --development"
+    "watch": "gulp watch --development",
+    "start": "web-ext run"
   },
   "dependencies": {
     "@babel/core": "^7.25.2",
