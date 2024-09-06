@@ -48,7 +48,7 @@ function determineLinkType(linkUrl) {
   const { pathname } = linkUrl;
   if (pathname.startsWith('/watch') || pathname.startsWith('/shorts') || linkUrl.origin.includes('youtu.be/')) {
     return 'video';
-  } else if (pathname.startsWith('/@') || pathname.startsWith('/channel')) {
+  } else if (pathname.startsWith('/@') || pathname.startsWith('/channel') || pathname.startsWith('/c/') || pathname.startsWith('/user')) {
     return 'channel';
   }
   return null;
