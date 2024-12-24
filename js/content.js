@@ -8,11 +8,12 @@ browser.runtime.onMessage.addListener((message, sender, sendResponse) => {
       linkText: linkText,
       linkMeta: linkMeta
     });
-  }
-  if (message.action === 'openPopup') {
+    return true; // Allow for asynchronous operations if needed
+  } else if (message.action === 'openPopup') {
     const { link, type, linkText, linkMeta } = message;
     createPopup(link, type, linkText, linkMeta);
   }
+  return false;
 });
 
 const { DOMParser } = window;
@@ -232,10 +233,14 @@ function loadPlaylists() {
 function getText (elements) {
   const linkElement = elements.find(element => {
     const isVideo = element?.id.includes('video-title') || element.querySelector('#video-title');
-    const isChannel = element.closest('#channel-name');
+    const isChannel = element.closest('#channel-name') || element.closest('.ytd-channel-name');
     return isVideo || isChannel;
   });
-  return linkElement?.title || linkElement?.querySelector('#video-title')?.title || linkElement?.textContent || 'No text available';
+  return linkElement?.title
+  || linkElement?.querySelector('#video-title')?.title
+  || linkElement?.querySelector('#text')?.title
+  || linkElement?.textContent.trim()
+  || 'No text available';
 }
 
 function getMeta (elements, linkType) {
@@ -255,11 +260,21 @@ function getMeta (elements, linkType) {
   } else {
     let metaElement = null;
     elements.forEach(element => {
-      if (metaElement === null) {
-        if (element.closest('#details') && element.closest('#details').querySelector('#decorated-avatar img')) {
-          metaElement = element.closest('#details').querySelector('#decorated-avatar img');
-        } else if (element.closest('#channel-info') && element.closest('#channel-info').querySelector('#channel-thumbnail img')) {
-          metaElement = element.closest('#channel-info').querySelector('#channel-thumbnail img');
+      // check if element is visible
+      if (metaElement === null && element.offsetHeight !== 0 && element.offsetWidth !== 0) {
+        const closestDetails = element.closest('#details');
+        const closestChannelInfo = element.closest('#channel-info');
+        const closestHeader = element.closest('#header');
+        const closestOwner = element.closest('#owner');
+        
+        if (closestDetails && closestDetails.querySelector('#decorated-avatar img')) {
+          metaElement = closestDetails.querySelector('#decorated-avatar img');
+        } else if (closestChannelInfo && closestChannelInfo.querySelector('#channel-thumbnail img')) {
+          metaElement = closestChannelInfo.querySelector('#channel-thumbnail img');
+        } else if (closestOwner && closestOwner.querySelector('img#img')) {
+          metaElement = closestOwner.querySelector('img#img');
+        } else if (closestHeader && closestHeader.querySelector('img#img')) {
+          metaElement = closestHeader.querySelector('img#img');
         }
       }
     });

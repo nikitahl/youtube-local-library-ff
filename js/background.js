@@ -22,7 +22,7 @@ browser.contextMenus.onClicked.addListener((info, tab) => {
       action: 'getLinkParams',
       linkUrl: info.linkUrl,
       linkType: linkType
-    }, response => {
+    }).then( response => {
       const linkText = response ? response.linkText : 'No text available';
       const linkMeta = response ? response.linkMeta : 'No meta available';
       
@@ -35,6 +35,8 @@ browser.contextMenus.onClicked.addListener((info, tab) => {
           linkMeta: linkMeta
         });
       });
+    }).catch( error => {
+      console.error('Error in sending response: ', error);
     });
   }
 });
