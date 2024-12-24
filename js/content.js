@@ -174,14 +174,15 @@ function saveToLocalStorage(category, link, linkText, linkMeta, playlistName = n
   });
 }
 
-function toCamelCase(str) {
-  return str
+function toCamelCase(string) {
+  string = string || '';
+  return string.toString()
     .toLowerCase()
-    .split(/[\s_-]+/)  // Split by space, hyphen, or underscore
-    .map((word, index) => 
-      index === 0 ? word : word.charAt(0).toUpperCase() + word.slice(1)
-    )
-    .join('');
+    .replace(/[^\w\s]/g, '') // Remove non-word [a-z0-9_] and non-whitespace characters
+    .replace(/(?:^\w|[A-Z]|\b\w)/g, (word, index) => 
+      index === 0 ? word.toLowerCase() : word.toUpperCase()
+    ) // Convert to camelCase
+    .replace(/\s+/g, ''); // Remove all spaces
 }
 
 function loadPlaylists() {
