@@ -7,17 +7,69 @@
   <link rel="stylesheet" href="dist/css/popup.min.css">
 </head>
 <body>
-  <div class="main-popup">
+  <div class="main-popup" id="mainPopup">
     <h1>Youtube Local Library</h1>
-    <div>
-      <button class="popup-btn" id="openPage">
-        <svg xmlns="http://www.w3.org/2000/svg" enable-background="new 0 0 24 24" height="24" viewBox="0 0 24 24" width="24" focusable="false" style="pointer-events: none;" aria-hidden="true">
-          <path d="m10 8 6 4-6 4V8zm11-5v18H3V3h18zm-1 1H4v16h16V4z"></path>
-        </svg>
-        Open library
-      </button>
+    <div id="mainMenu">
+      <div>
+        <button class="popup-btn" id="openPage">
+          <svg xmlns="http://www.w3.org/2000/svg" enable-background="new 0 0 24 24" height="24" viewBox="0 0 24 24" width="24" focusable="false" style="pointer-events: none;" aria-hidden="true">
+            <path d="m10 8 6 4-6 4V8zm11-5v18H3V3h18zm-1 1H4v16h16V4z" fill="var(--color)"></path>
+          </svg>
+          Open library
+        </button>
+      </div>
+      <div>
+        <button class="popup-btn" id="appearanceBtn">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" height="24" width="24" focusable="false" aria-hidden="true" style="pointer-events: none;">
+            <path d="M12 22C10.93 22 9.86998 21.83 8.83998 21.48L7.41998 21.01L8.83998 20.54C12.53 19.31 15 15.88 15 12C15 8.12 12.53 4.69 8.83998 3.47L7.41998 2.99L8.83998 2.52C9.86998 2.17 10.93 2 12 2C17.51 2 22 6.49 22 12C22 17.51 17.51 22 12 22ZM10.58 20.89C11.05 20.96 11.53 21 12 21C16.96 21 21 16.96 21 12C21 7.04 16.96 3 12 3C11.53 3 11.05 3.04 10.58 3.11C13.88 4.81 16 8.21 16 12C16 15.79 13.88 19.19 10.58 20.89Z" fill="var(--color)"></path>
+          </svg>
+          <span class="btn-text">
+            Appearance:
+          </span>
+          <svg style="margin-left:auto;" xmlns="http://www.w3.org/2000/svg" height="24" viewBox="0 0 24 24" width="24" focusable="false" aria-hidden="true" style="pointer-events: none;">
+            <path d="m9.4 18.4-.7-.7 5.6-5.6-5.7-5.7.7-.7 6.4 6.4-6.3 6.3z" fill="var(--color)"></path>
+          </svg>
+        </button>
+      </div>
+    </div>
+    <div id="appearance" class="appearance-view hidden">
+      <div class="popup-header">
+        <button class="popup-btn back-btn" id="appearanceBackBtn">
+          <svg xmlns="http://www.w3.org/2000/svg" enable-background="new 0 0 24 24" height="24" viewBox="0 0 24 24" width="24" focusable="false" aria-hidden="true" style="pointer-events: none;">
+            <path d="M21 11v1H5.64l6.72 6.72-.71.71-7.93-7.93 7.92-7.92.71.71L5.64 11H21z" fill="var(--color)"></path>
+          </svg>
+        </button>
+        <span>
+          Appearance
+        </span>
+      </div>
+      <div>
+        <button class="popup-btn device-btn" id="deviceTheme" data-text="Device theme" data-theme="device">
+          <svg xmlns="http://www.w3.org/2000/svg" height="24" viewBox="0 0 24 24" width="24" focusable="false" aria-hidden="true" style="pointer-events: none;">
+            <path d="m9 18.7-5.4-5.4.7-.7L9 17.3 20.6 5.6l.7.7L9 18.7z" fill="var(--color)"></path>
+          </svg>
+          Use device theme
+        </button>
+      </div>
+      <div>
+        <button class="popup-btn device-btn" id="darkTheme" data-text="Dark theme" data-theme="dark">
+          <svg xmlns="http://www.w3.org/2000/svg" height="24" viewBox="0 0 24 24" width="24" focusable="false" aria-hidden="true" style="pointer-events: none;">
+            <path d="m9 18.7-5.4-5.4.7-.7L9 17.3 20.6 5.6l.7.7L9 18.7z" fill="var(--color)"></path>
+          </svg>
+          Dark theme
+        </button>
+      </div>
+      <div>
+        <button class="popup-btn device-btn" id="lightTheme" data-text="Light theme" data-theme="light">
+          <svg xmlns="http://www.w3.org/2000/svg" height="24" viewBox="0 0 24 24" width="24" focusable="false" aria-hidden="true" style="pointer-events: none;">
+            <path d="m9 18.7-5.4-5.4.7-.7L9 17.3 20.6 5.6l.7.7L9 18.7z" fill="var(--color)"></path>
+          </svg>
+          Light theme
+        </button>
+      </div>
     </div>
   </div>
+</div>
   <script src="dist/js/popup.min.js"></script>
 </body>
 </html>

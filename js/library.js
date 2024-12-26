@@ -118,3 +118,33 @@ function renderNoContent (content, container) {
   const noContent = createElement(tag, content, attributes);
   container.append(noContent);
 }
+
+function setTheme (theme) {
+  document.documentElement.className = '';
+  if (theme === 'device') {
+    const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+    document.documentElement.classList.add(prefersDark ? 'dark' : 'light');
+  } else {
+    document.documentElement.classList.add(theme);
+  }
+}
+
+
+document.addEventListener('DOMContentLoaded', () => {
+  const savedTheme = window.localStorage.getItem('theme') || 'device';
+  const mediaQuery = window.matchMedia('(prefers-color-scheme: dark)');
+  const handleDeviceThemeChange = () => setTheme('device');
+
+  setTheme(savedTheme);
+
+  window.addEventListener('storage', e => {
+    if (e.key === 'theme') {
+      setTheme(e.newValue);
+      if (e.newValue === 'device' && !mediaQuery.onchange) {
+        mediaQuery.addEventListener('change', handleDeviceThemeChange);
+      } else {
+        mediaQuery.removeEventListener('change', handleDeviceThemeChange);
+      }
+    }
+  });
+});
