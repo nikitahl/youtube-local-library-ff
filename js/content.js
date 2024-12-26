@@ -105,7 +105,7 @@ function createPopup(link, type, linkText, linkMeta) {
     });
   
     document.getElementById('createPlaylist').addEventListener('click', () => {
-      const playlistName = document.getElementById('newPlaylistName').value;
+      const playlistName = document.getElementById('newPlaylistName').value.trim();
       const select = document.getElementById('playlistSelect');
       const playlistSelect = select.value;
       if (playlistSelect) {
@@ -221,7 +221,7 @@ function loadPlaylists() {
     });
 
     playlistName.addEventListener('input', e =>{
-      if (e.target.value) {
+      if (e.target.value.trim()) {
         savePlaylist.removeAttribute('disabled');
       } else {
         savePlaylist.setAttribute('disabled', 'true');
