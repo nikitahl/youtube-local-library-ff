@@ -40,7 +40,7 @@ cd youtube-local-library-ff
 ```sh
 yarn install
 ```
-5. Build project:
+5. Build project using [Gulp](https://gulpjs.com/):
 ```sh
 yarn build
 ```
@@ -48,13 +48,13 @@ or watch changes:
 ```sh
 yarn watch
 ```
-6. Install [web-ext](https://www.npmjs.com/package/web-ext) package:
+6. Install the [web-ext](https://www.npmjs.com/package/web-ext) package:
 ```sh
-npm install --global web-ext
+yarn add --global web-ext
 ```
-7. Run the `start` command to execute the web-ext package (`web-ext run`) to refresh extension on change
+7. Run the `start` command to execute the web-ext package (`web-ext run`) to refresh extension on change (a browser window should open with the addon):
 ```sh
-yarn run start
+yarn start
 ```
 
 ## Codestyle
