@@ -1,10 +1,9 @@
+browser.runtime.onStartup.addListener(() => {
+  initializeAddon();
+});
+
 browser.runtime.onInstalled.addListener(() => {
-  browser.contextMenus.create({
-    id: 'saveTo',
-    title: 'Save to YouTube Local Library',
-    contexts: [ 'link' ],
-    documentUrlPatterns: [ '*://*.youtube.com/*' ]
-  });
+  initializeAddon();
 });
 
 // Handle context menu item click
@@ -44,6 +43,17 @@ browser.contextMenus.onClicked.addListener((info, tab) => {
 browser.browserAction.onClicked.addListener(() => {
   browser.tabs.create({ url: browser.runtime.getURL('../library.html') });
 });
+
+function initializeAddon () {
+  browser.contextMenus.removeAll(() => {
+    browser.contextMenus.create({
+      id: 'saveTo',
+      title: 'Save to YouTube Local Library',
+      contexts: [ 'link' ],
+      documentUrlPatterns: [ '*://*.youtube.com/*' ]
+    });
+  });
+}
 
 // Function to determine the type of YouTube link
 function determineLinkType(linkUrl) {
