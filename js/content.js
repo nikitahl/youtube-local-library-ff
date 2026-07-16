@@ -230,10 +230,24 @@ function loadPlaylists() {
   });
 }
 
+function checkIsVideo (element) {
+  return element?.id.includes('video-title') ||
+        element.querySelector('#video-title') ||
+        element.classList.contains('ytLockupMetadataViewModelTitle') ||
+        element.classList.contains('shortsLockupViewModelHostEndpoint');
+}
+
+function checkIsChannel (element) {
+  return element.closest('#channel-name') ||
+        element.closest('.ytd-channel-name') ||
+        element.href.includes('channel') ||
+        element.closest('#author-text');
+}
+
 function getText (elements) {
   const linkElement = elements.find(element => {
-    const isVideo = element?.id.includes('video-title') || element.querySelector('#video-title');
-    const isChannel = element.closest('#channel-name') || element.closest('.ytd-channel-name');
+    const isVideo = checkIsVideo(element);
+    const isChannel = checkIsChannel(element);
     return isVideo || isChannel;
   });
   return linkElement?.title
