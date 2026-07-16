@@ -170,7 +170,7 @@ function saveToLocalStorage(category, link, linkText, linkMeta, playlistName = n
         console.log(`${category} saved:`, itemToSave);
       });
     } else {
-      console.log(`${link} already exists in ${category}`);
+      console.warn(`${link} already exists in ${category}`);
     }
   });
 }

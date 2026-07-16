@@ -4,6 +4,7 @@
   --color-secondary: #606060;
   --bg-color: #f7f7f7;
   --bg-color-secondary: #eaeaea;
+  --bg-color-hover: #cbcbcb;
   --border-radius: 10px;
   --body-bg-color: #fff;
 }
@@ -13,6 +14,7 @@
   --color-secondary: #aaa;
   --bg-color: rgba(255,255,255,0.15);
   --bg-color-secondary: rgba(255,255,255,0.25);
+  --bg-color-hover: rgba(255,255,255,0.45);
   --body-bg-color: #0f0f0f;
 }
 
@@ -195,6 +197,7 @@ h3 {
 }
 
 .playlist {
+  position: relative;
   display: flex;
   flex-direction: column;
   gap: 6px;
@@ -215,6 +218,56 @@ h3 {
   font-size: 0.9em;
 }
 
+.playlist-more {
+  position: absolute;
+  top: 20px;
+  right: 10px;
+  display: inline-flex;
+  justify-content: center;
+  align-items: center;
+  width: 24px;
+  height: 24px;
+  padding: 0;
+  margin: 0;
+  border: none;
+  border-radius: 50%;
+  background: transparent;
+  cursor: pointer;
+  transition: background-color .2s ease-in-out;
+}
+
+.playlist-more:hover,
+.playlist-more.active {
+  background-color: var(--bg-color-hover);
+}
+
+.playlist-options {
+  position: absolute;
+  top: 50px;
+  right: -50px;
+  background: transparent;
+  border-radius: var(--border-radius);
+  box-shadow: 0 1px 7px -2px #aaa;
+  z-index: 1;
+  overflow: hidden;
+}
+
+.playlist-remove {
+  display: inline-flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  padding: 10px;
+  border: none;
+  background: var(--bg-color);
+  cursor: pointer;
+  transition: background .2s ease-in-out;
+}
+
+.playlist-remove:hover {
+  background: var(--bg-color);
+}
+
 @media screen and (max-width: 800px) {
-  
+  /* TODO: add styles for smaller screensizes */
 }

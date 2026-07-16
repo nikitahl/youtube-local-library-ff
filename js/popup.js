@@ -100,7 +100,7 @@ document.addEventListener('DOMContentLoaded', () => {
 // () Add label for shorts (to indicate it'sa short)
 // (*) Add more checks for avatar img
 // (*) Add more checks for channel name
-// () Add ability to remove playlists
+// (*) Add ability to remove playlists
 // (*) Add playlists to playlist page
 // () Add checks for local storage cpacity
 // (*) Add dark mode (to the main extention popup)
