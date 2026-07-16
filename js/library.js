@@ -1,5 +1,4 @@
 document.addEventListener('DOMContentLoaded', () => {
-  // eslint-disable-next-line
   const url = new URL(window.location.href);
   const { DOMParser } = window;
   const parser = new DOMParser();
@@ -84,7 +83,6 @@ document.addEventListener('DOMContentLoaded', () => {
         'data-category': 'channels',
         'data-type': 'channel'
       };
-      // eslint-disable-next-line
       const li = createElement('li', null,  liOptions);
       const channelLinkOptions = {
         className: 'secondary-link',
@@ -92,13 +90,11 @@ document.addEventListener('DOMContentLoaded', () => {
         title: channel.linkText,
         target: '_blank'
       };
-      // eslint-disable-next-line
       const channelLink = createElement('a', channel.linkText, channelLinkOptions);
       const btnAttributes = {
         title: 'Remove',
         className: 'remove-item'
       };
-      // eslint-disable-next-line
       const removeBtn = createElement('button', null, btnAttributes);
       const template = document.querySelector('#removeSvgTemplate');
       const clone = template.content.cloneNode(true);
@@ -111,7 +107,6 @@ document.addEventListener('DOMContentLoaded', () => {
         avatarOptions.src = channel.linkMeta.avatar;
         avatarOptions.loading = 'lazy';
       }
-      // eslint-disable-next-line
       const avatar = createElement('img', null , avatarOptions);
       li.appendChild(avatar);
       li.appendChild(channelLink);
@@ -123,7 +118,6 @@ document.addEventListener('DOMContentLoaded', () => {
   function renderNoContent (content, container) {
     const tag = 'p';
     const attributes = {};
-    // eslint-disable-next-line
     const noContent = createElement(tag, content, attributes);
     container.append(noContent);
   }
@@ -144,8 +138,8 @@ document.addEventListener('DOMContentLoaded', () => {
       const playlist = target.closest('.playlist');
       playlist.classList.add('active');
       target.classList.add('active');
-      const dropdown = createElement('div', null, {className: 'playlist-options'});
-      const removeBtn =  createElement('button', 'Remove playlist', {className: 'playlist-remove'});
+      const dropdown = createElement('div', null, { className: 'playlist-options' });
+      const removeBtn =  createElement('button', 'Remove playlist', { className: 'playlist-remove' });
       const template = document.querySelector('#removeSvgTemplate');
       const clone = template.content.cloneNode(true);
       removeBtn.prepend(clone);
@@ -164,11 +158,11 @@ document.addEventListener('DOMContentLoaded', () => {
           const playlists = result.playlists;
           try{
             delete playlists[playlistName];
-            browser.storage.local.set({'playlists': playlists});
+            browser.storage.local.set({ 'playlists': playlists });
             removeOptionsPopup();
             playlistContainer.remove();
           } catch (e) {
-            console.error(`Unable to delete a playlist ${playlistName}: `, e)
+            console.error(`Unable to delete a playlist ${playlistName}: `, e);
           }
         });
       }

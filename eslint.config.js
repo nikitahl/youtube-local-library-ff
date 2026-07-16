@@ -13,7 +13,10 @@ export default [
         document: 'readonly',
         window: 'readonly',
         console: 'readonly',
-        chrome: 'readonly'
+        chrome: 'readonly',
+        URL: 'readonly',
+        createElement: 'readonly',
+        setTimeout: 'readonly'
       }
     },
     rules: {
