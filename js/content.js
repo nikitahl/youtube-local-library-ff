@@ -276,7 +276,7 @@ function getMeta (elements, linkType) {
       }
     });
     meta.channelName = metaElement?.textContent || '';
-    meta.channelLink = metaElement?.href || '';
+    meta.channelLink = metaElement?.href || (meta.channelName && getChannelSearchUrl(meta.channelName)) || '';
   } else {
     let metaElement = null;
     elements.forEach(element => {
@@ -299,6 +299,12 @@ function getMeta (elements, linkType) {
       }
     });
     meta.avatar = metaElement?.src || '';
+  }
+
+  function getChannelSearchUrl (channelName) {
+    channelName = encodeURIComponent(channelName);
+    channelName = `https://www.youtube.com/results?search_query=${channelName}`;
+    return channelName;
   }
 
   return meta;
