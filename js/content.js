@@ -267,6 +267,12 @@ function getMeta (elements, linkType) {
         metaElement = element?.querySelector('.ytd-channel-name');
       } else if (element.closest('#meta')?.querySelector('.ytd-channel-name a')) { // video lists
         metaElement = element.closest('#meta').querySelector('.ytd-channel-name a');
+      } else if (element.closest('.ytLockupViewModelMetadata')?.querySelector('.ytContentMetadataViewModelMetadataText')) {
+        metaElement = element.closest('.ytLockupViewModelMetadata').querySelector('.ytContentMetadataViewModelMetadataText');
+      } else if (element.id === 'wc-endpoint') {
+        metaElement = element.querySelector('#byline');
+      } else if (element.closest('.ytLockupMetadataViewModelTextContainer')?.querySelector('.ytAttributedStringLink')) {
+        metaElement = element.closest('.ytLockupMetadataViewModelTextContainer').querySelector('.ytAttributedStringLink');
       }
     });
     meta.channelName = metaElement?.textContent || '';
