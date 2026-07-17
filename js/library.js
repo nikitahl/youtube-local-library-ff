@@ -13,8 +13,22 @@ document.addEventListener('DOMContentLoaded', () => {
   if (!playlistName) {
     playlistName = 'watchLater';
   }
-  browser.storage.local.get([ 'playlists' ], result => {
-    const playlist = result.playlists && result.playlists[playlistName];
+
+  // Fetch saved playlists from localStorage
+  browser.storage.local.get({ playlists: [] }, result => {
+    const playlists = result.playlists;
+    const currentPlaylist = playlists && playlists[playlistName];
+    renderCurrentPlaylist(currentPlaylist);
+    renderPlaylists(playlists);
+  });
+
+  // Fetch saved channels from localStorage
+  chrome.storage.local.get({ channels: [] }, result => {
+    const savedChannels = result.channels.general;
+    renderChannels(savedChannels);
+  });
+
+  function renderCurrentPlaylist (playlist) {
     if (playlist) {
       playlistTitle.innerText = playlist.playlistName;
       if (playlist.videos.length) {
@@ -28,10 +42,9 @@ document.addEventListener('DOMContentLoaded', () => {
       const content = 'You have no videos saved in this playlist.';
       renderNoContent(content, currentPlaylistContainer);
     }
-  });
+  }
 
-  browser.storage.local.get({ playlists: [] }, result => {
-    const playlists = result.playlists;
+  function renderPlaylists (playlists) {
     if (Object.keys(playlists).length === 0) {
       const content = 'You have no playlists.';
       renderNoContent(content, playlistsContainer);
@@ -67,17 +80,15 @@ document.addEventListener('DOMContentLoaded', () => {
         playlistsContainer.appendChild(playlistContainer);
       }
     }
-  });
+  }
 
-  // Fetch saved channels from localStorage
-  chrome.storage.local.get({ channels: [] }, result => {
-    const savedChannels = result.channels.general;
-    if (!savedChannels || !savedChannels.length) {
+  function renderChannels (channels) {
+    if (!channels || !channels.length) {
       const content = 'You have no saved channels.';
       renderNoContent(content, channelsList);
       return;
     }
-    savedChannels && savedChannels.forEach(channel => {
+    channels && channels.forEach(channel => {
       const liOptions = {
         'data-link': channel.link,
         'data-category': 'channels',
@@ -113,7 +124,7 @@ document.addEventListener('DOMContentLoaded', () => {
       li.appendChild(removeBtn);
       channelsList.appendChild(li);
     });
-  });
+  }
 
   function renderNoContent (content, container) {
     const tag = 'p';
