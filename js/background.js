@@ -9,7 +9,6 @@ browser.runtime.onInstalled.addListener(() => {
 // Handle context menu item click
 browser.contextMenus.onClicked.addListener((info, tab) => {
   if (info.linkUrl) {
-    // eslint-disable-next-line
     const linkUrl = new URL(info.linkUrl);
     const linkType = determineLinkType(linkUrl);
     if (!linkType) {
